@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Announcement Ticker</title>
+  <style>
+    #ticker ul { list-style: none; padding: 0; }
+    #ticker li { padding: 5px; }
+  </style>
+</head>
+<body>
+  <div id="ticker">Loading announcements...</div>
+  <script>
+    (function() {
+      var listTitle = 'Announcements';
+      var url = _spPageContextInfo.webAbsoluteUrl + "/_api/web/lists/getbytitle('" + listTitle + "')/items?$orderby=Created%20desc&$top=5";
+      fetch(url, { headers: { 'Accept': 'application/json;odata=verbose' } })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          var items = data.d.results;
+          var html = '<ul>';
+          for (var i=0; i < items.length; i++) {
+            html += '<li>' + items[i].Title + '</li>';
+          }
+          html += '</ul>';
+          document.getElementById('ticker').innerHTML = html;
+        });
+    })();
+  </script>
+</body>
+</html>
